@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27924.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesRepository", "StrikesRepository\StrikesRepository.csproj", "{4E731264-E9AB-477C-84E2-66D3738599A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesLibrary", "StrikesLibrary\StrikesLibrary.csproj", "{94987DBF-1824-4739-89CB-D3072FF21BEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseSeed", "DatabaseSeed\DatabaseSeed.csproj", "{894A6104-2DC4-479C-96DF-0FA0E502969D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{4E731264-E9AB-477C-84E2-66D3738599A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E731264-E9AB-477C-84E2-66D3738599A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E731264-E9AB-477C-84E2-66D3738599A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94987DBF-1824-4739-89CB-D3072FF21BEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94987DBF-1824-4739-89CB-D3072FF21BEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94987DBF-1824-4739-89CB-D3072FF21BEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94987DBF-1824-4739-89CB-D3072FF21BEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{894A6104-2DC4-479C-96DF-0FA0E502969D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{894A6104-2DC4-479C-96DF-0FA0E502969D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{894A6104-2DC4-479C-96DF-0FA0E502969D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{894A6104-2DC4-479C-96DF-0FA0E502969D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
