@@ -12,6 +12,7 @@ namespace StrikesLibrary
     public interface IApplicationDbContext
     {
         IEnumerable<Package> GetPackages(string name);
+        Package GetPackage(string name);
     }
     public class ApplicationDbContext : IApplicationDbContext
     {
@@ -33,6 +34,15 @@ namespace StrikesLibrary
         public IEnumerable<Package> GetPackages(string name)
         {
             return GetPackages(name, GetPackagesWithIndexQuery);
+        }
+
+        // This part should be tested by integration testing.
+        public Package GetPackage(string name)
+        {
+            var query = client.CreateDocumentQuery<Package>(
+                    UriFactory.CreateDocumentCollectionUri(this.databaseId, typeof(Package).Name))
+                .Where(p => p.id == name);
+            return query.FirstOrDefault<Package>();
         }
 
         // This part should be tested by integration testing.  

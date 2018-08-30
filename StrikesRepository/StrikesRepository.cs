@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using StrikesLibrary;
 using Microsoft.Azure.Documents.Client;
 using System;
+using DIBindings;
 
 namespace StrikesRepository
 {
@@ -24,21 +25,23 @@ namespace StrikesRepository
                     databaseName: "RepositoryDB", 
                     collectionName: "Package",
                     ConnectionStringSetting = "")] DocumentClient client,
+                [Inject] IPackageRepository repository,
                 ILogger log)
         {
             var name = req.Query["name"];
-
-            return new OkObjectResult($"Result!");
+            var packages = repository.GetPackages(name);
+            return new OkObjectResult(JsonConvert.SerializeObject((packages)));
         }
         // Get Pakcage
         [FunctionName("GetPackage")]
         public static async Task<IActionResult> GetPackage(
-                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "package")]HttpRequest req, ILogger log)
+                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "package")]HttpRequest req, 
+                [Inject] IPackageRepository repository,
+                ILogger log)
         {
-
-
-
-            return new OkObjectResult($"Result!");
+            var name = req.Query["name"];
+            var package = repository.GetPackage(name);
+            return new OkObjectResult(JsonConvert.SerializeObject(package));
         }
 
         // (Eventually move) CreateOrUpdate the Package
