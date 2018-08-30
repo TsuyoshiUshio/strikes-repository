@@ -27,8 +27,6 @@ namespace StrikesRepository
                 ILogger log)
         {
             var name = req.Query["name"];
-            Uri collectionUri = UriFactory.CreateDocumentCollectionUri("Package", "");
-
 
             return new OkObjectResult($"Result!");
         }

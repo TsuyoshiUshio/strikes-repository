@@ -8,6 +8,7 @@
     <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.14" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DIBindings\DIBindings.csproj" />
     <ProjectReference Include="..\StrikesLibrary\StrikesLibrary.csproj" />
   </ItemGroup>
   <ItemGroup>
