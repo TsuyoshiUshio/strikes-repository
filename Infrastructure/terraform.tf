@@ -121,3 +121,15 @@ resource "azurerm_function_app" "test" {
     "cosmosDBConnection" = "AccountEndpoint=${azurerm_cosmosdb_account.db.endpoint};AccountKey=${azurerm_cosmosdb_account.db.primary_master_key};"
   }
 }
+
+resource "azurerm_search_service" "test" {
+  name  = "${var.environment_base_name}search"
+  location                  = "${azurerm_resource_group.test.location}"
+  resource_group_name       = "${azurerm_resource_group.test.name}"
+  sku  = "standard"
+
+  tags {
+    environment = "production"
+    database = "${azurerm_cosmosdb_account.test.name}"
+  }
+}
