@@ -117,6 +117,7 @@ resource "azurerm_function_app" "test" {
   app_settings {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = "${azurerm_application_insights.test.instrumentation_key}"
     "FUNCTIONS_EXTENSION_VERSION" = "beta"
+    "assetServerUri" = "https://asset.simplearchitect.club/"
     "repoConnectionString" = "${azurerm_storage_account.repo.primary_connection_string}"
     "cosmosDBConnection" = "AccountEndpoint=${azurerm_cosmosdb_account.db.endpoint};AccountKey=${azurerm_cosmosdb_account.db.primary_master_key};"
   }

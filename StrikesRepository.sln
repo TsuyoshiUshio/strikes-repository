@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27924.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesRepository", "StrikesRepository\StrikesRepository.csproj", "{4E731264-E9AB-477C-84E2-66D3738599A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikesRepository", "StrikesRepository\StrikesRepository.csproj", "{4E731264-E9AB-477C-84E2-66D3738599A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesLibrary", "StrikesLibrary\StrikesLibrary.csproj", "{94987DBF-1824-4739-89CB-D3072FF21BEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikesLibrary", "StrikesLibrary\StrikesLibrary.csproj", "{94987DBF-1824-4739-89CB-D3072FF21BEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseSeed", "DatabaseSeed\DatabaseSeed.csproj", "{894A6104-2DC4-479C-96DF-0FA0E502969D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseSeed", "DatabaseSeed\DatabaseSeed.csproj", "{894A6104-2DC4-479C-96DF-0FA0E502969D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProtectedStrikes", "ProtectedStrikes\ProtectedStrikes.csproj", "{4C11CF40-D4CC-4A78-90FF-8470DF99FE57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtectedStrikes", "ProtectedStrikes\ProtectedStrikes.csproj", "{4C11CF40-D4CC-4A78-90FF-8470DF99FE57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesLibrary.Test", "StrikesLibrary.Test\StrikesLibrary.Test.csproj", "{16059847-0D3C-4FDA-9FC2-559200F92A08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikesLibrary.Test", "StrikesLibrary.Test\StrikesLibrary.Test.csproj", "{16059847-0D3C-4FDA-9FC2-559200F92A08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesIntegration.Test", "StrikesIntegration.Test\StrikesIntegration.Test.csproj", "{60BBC32E-705E-4CEE-B75D-7FDA23A1E250}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikesIntegration.Test", "StrikesIntegration.Test\StrikesIntegration.Test.csproj", "{60BBC32E-705E-4CEE-B75D-7FDA23A1E250}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DIBindings", "DIBindings\DIBindings.csproj", "{F10783AE-BE5E-4B0A-9F18-52C971AF375E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DIBindings", "DIBindings\DIBindings.csproj", "{F10783AE-BE5E-4B0A-9F18-52C971AF375E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesRepository.Test", "StrikesRepository.Test\StrikesRepository.Test.csproj", "{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{F10783AE-BE5E-4B0A-9F18-52C971AF375E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F10783AE-BE5E-4B0A-9F18-52C971AF375E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F10783AE-BE5E-4B0A-9F18-52C971AF375E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,6 +17,9 @@ namespace StrikesRepository
 {
     public static class StrikesRepository
     {
+        private const string DATABASE_NAME = "RepositoryDB";
+
+        private const string COLLECTION_NAME = "Package";
         // Search Packages  Search by Name or nothing. 
         [FunctionName("GetPackages")]
             public static async Task<IActionResult> GetPackages(
@@ -35,19 +38,32 @@ namespace StrikesRepository
         // Get Pakcage
         [FunctionName("GetPackage")]
         public static async Task<IActionResult> GetPackage(
-                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "package")]HttpRequest req, 
-                [Inject] IPackageRepository repository,
+                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "package/{id}")]HttpRequest req,
+                [CosmosDB(DATABASE_NAME, COLLECTION_NAME, ConnectionStringSetting = "CosmosDBConnection", Id = "{id}")] object document,
                 ILogger log)
         {
-            var name = req.Query["name"];
-            var package = repository.GetPackage(name);
-            return new OkObjectResult(JsonConvert.SerializeObject(package));
+            if (document == null)
+            {
+                return new NotFoundObjectResult(document);
+            }
+            else
+            {
+                return new OkObjectResult(document);
+            }
         }
 
         // (Eventually move) CreateOrUpdate the Package
-        [FunctionName("CreateOrUpdatePackage")]
-        public static async Task<IActionResult> CreateOrUpdatePackage(
+        [FunctionName("CreatePackage")]
+        public static async Task<IActionResult> CreatePackage(
         [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "package")]HttpRequest req, ILogger log)
+        {
+
+            return new OkObjectResult($"Result!");
+        }
+
+        [FunctionName("UpdatePackage")]
+        public static async Task<IActionResult> UpdatePackage(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "package")]HttpRequest req, ILogger log)
         {
 
             return new OkObjectResult($"Result!");
@@ -59,6 +75,15 @@ namespace StrikesRepository
         [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "package")]HttpRequest req, ILogger log)
         {
 
+            return new OkObjectResult($"Result!");
+        }
+
+        // Fetch the BlobServer address from AppSettings : TODO change terraform.tf
+        [FunctionName("GetAssertServerUri")]
+        public static async Task<IActionResult> GetRepositoryBaseUri(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "assetserveruri")]
+            HttpRequest req, ILogger log)
+        {
             return new OkObjectResult($"Result!");
         }
 
