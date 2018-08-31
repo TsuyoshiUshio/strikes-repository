@@ -124,7 +124,7 @@ resource "azurerm_function_app" "test" {
 
 resource "azurerm_search_service" "test" {
   name  = "${var.environment_base_name}search"
-  location                  = "${azurerm_resource_group.test.location}"
+  location                  = "japanwest"
   resource_group_name       = "${azurerm_resource_group.test.name}"
   sku  = "standard"
 
