@@ -29,8 +29,8 @@ namespace StrikesRepository
                 ILogger log)
         {
             var name = req.Query["name"];
-            var packages = repository.GetPackages(name);
-            return new OkObjectResult(JsonConvert.SerializeObject((packages)));
+           // This will be replaced by Azure Search. 
+            return new OkObjectResult(JsonConvert.SerializeObject("hello"));
         }
         // Get Pakcage
         [FunctionName("GetPackage")]

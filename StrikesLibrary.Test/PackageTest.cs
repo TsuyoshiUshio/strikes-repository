@@ -16,11 +16,8 @@ namespace StrikesLibrary.Test
             {
                 Name = "abcd"
             };
-
-            p.Setup();
-
+            
             Assert.AreEqual("abcd", p.id);
-            Assert.AreEqual("a", p.NameIndex0);
         }
 
     }

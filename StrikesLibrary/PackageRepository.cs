@@ -6,7 +6,6 @@ namespace StrikesLibrary
 {
     public interface IPackageRepository
     {
-        IEnumerable<Package> GetPackages(string name);
         Package GetPackage(string name);
     }
     public class PackageRepository : IPackageRepository
@@ -15,11 +14,6 @@ namespace StrikesLibrary
         public PackageRepository(IApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
-        }
-
-        public IEnumerable<Package> GetPackages(string name)
-        {
-            return this.dbContext.GetPackages(name);
         }
 
         public Package GetPackage(string name)

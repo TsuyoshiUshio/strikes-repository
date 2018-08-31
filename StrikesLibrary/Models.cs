@@ -4,8 +4,26 @@ namespace StrikesLibrary
 {
     public class Package
     {
-        public string id { get; set; }
-        public string Name { get; set;}
+        private string _id;
+        private string _name;
+
+        public string id
+        {
+            get => _id;
+
+            set => _id = value;
+        }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                _id = value;
+            }
+        }
+
         public string Description { get; set; }
         public string Author { get; set; }
         public string ProjectPage { get; set; }
@@ -13,15 +31,6 @@ namespace StrikesLibrary
         public DateTime CreatedTime { get; set; }
         public Release[] Releases { get; set; }
 
-        public string NameIndex0 { get; set; }
-        internal void Setup()
-        {
-            this.id = this.Name;
-            if (!string.IsNullOrEmpty(Name))
-            {
-                this.NameIndex0 = this.Name.Substring(0, 1);
-            }
-        }
     }
 
     public enum ProviderType
