@@ -66,7 +66,8 @@ namespace StrikesRepository
             if (result.isValid)
             {
                 await packages.AddAsync(model);
-                return new CreatedAtActionResult("CreatedPackage", "StrikesRepository", $"package/{model.Id}", model);
+             
+                return new CreatedResult($"package/{model.Id}", model);
             }
             else
             {

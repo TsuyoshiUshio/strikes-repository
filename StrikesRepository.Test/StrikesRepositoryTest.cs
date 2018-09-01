@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace StrikesRepository.Test
 {
@@ -45,13 +46,14 @@ namespace StrikesRepository.Test
             var fixture = new ParameterFixture();
             fixture.SetUpCreated();
 
-            var result = (CreatedAtActionResult)await StrikesRepository.CreatePackage(fixture.Request, fixture.Collector, fixture.Logger);
-            fixture.VerifyCreated();
-            Assert.Equal("CreatedPackage", result.ActionName);
-            Assert.Equal("StrikesRepository", result.ControllerName);
-            Assert.Equal($"package/{fixture.Expected.Id}", (string)result.RouteValues.Values.GetEnumerator().Current);
-            Assert.Equal(fixture.Expected.Id, ((Package)result.Value).Id);
+            var result = await StrikesRepository.CreatePackage(fixture.Request, fixture.Collector, fixture.Logger);
+            Assert.Equal("CreatedResult", result.GetTypeName());
 
+            fixture.VerifyCreated();
+            var createdResult = (CreatedResult) result;
+            Assert.Equal($"package/{fixture.Expected.Id}", (string)createdResult.Location);
+            Assert.Equal(fixture.Expected.Id, ((Package)createdResult.Value).Id);
+            fixture.Cleanup();
         }
 
 
@@ -81,12 +83,37 @@ namespace StrikesRepository.Test
             public Package Input => _input;
             public Package Expected => _expected;
 
+            private Stream _stream;
+
             public void SetUpCreated()
             {
-                var p = createPackage();
+                var _input = createPackage();
                 // Setup HttpRequest 
-                var document = JsonConvert.SerializeObject(p);
-                _requestMock.Setup(some => some.ReadAsStringAsync()).Returns(Task.FromResult(document));
+                var document = JsonConvert.SerializeObject(_input);
+                _stream = GenerateStreamFromString(document); // try not to use using. 
+            
+                // ReadAsStreamAsync is extention method. we can't mock it. 
+                _requestMock.Setup(r => r.Body).Returns(_stream);
+                _collectorMock.Setup(c => c.AddAsync(It.IsAny<Package>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask)
+                    .Callback<Package, CancellationToken>((p, c) =>
+                    {
+                        _expected = p;
+                    }); 
+            }
+
+            public void Cleanup()
+            {
+                _stream.Close();
+            }
+
+            private static Stream GenerateStreamFromString(string s)
+            {
+                var stream = new MemoryStream();
+                var writer = new StreamWriter(stream);
+                writer.Write(s);
+                writer.Flush();
+                stream.Position = 0;
+                return stream;
             }
 
             public void VerifyCreated()
