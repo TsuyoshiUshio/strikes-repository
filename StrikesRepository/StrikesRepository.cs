@@ -55,15 +55,31 @@ namespace StrikesRepository
         // (Eventually move) CreateOrUpdate the Package
         [FunctionName("CreatePackage")]
         public static async Task<IActionResult> CreatePackage(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "package")]HttpRequest req, ILogger log)
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "package")]HttpRequest req,
+        [CosmosDB(DATABASE_NAME, COLLECTION_NAME, ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Package> packages,
+        ILogger log)
         {
-
-            return new OkObjectResult($"Result!");
+            var content = await req.ReadAsStringAsync();
+            var model = JsonConvert.DeserializeObject<Package>(content);
+            model.GenerateId();
+            var result = model.Validate();
+            if (result.isValid)
+            {
+                await packages.AddAsync(model);
+                return new CreatedAtActionResult("CreatedPackage", "StrikesRepository", $"package/{model.Id}", model);
+            }
+            else
+            {
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(result.validationResults));
+            }
         }
 
         [FunctionName("UpdatePackage")]
         public static async Task<IActionResult> UpdatePackage(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "package")]HttpRequest req, ILogger log)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "package/{id}")]HttpRequest req,
+            [CosmosDB(DATABASE_NAME, COLLECTION_NAME, ConnectionStringSetting = "CosmosDBConnection", Id = "{id}")] object document,
+            [CosmosDB(DATABASE_NAME, COLLECTION_NAME, ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Package> packages,
+            ILogger log)
         {
 
             return new OkObjectResult($"Result!");

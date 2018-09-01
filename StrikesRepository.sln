@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseSeed", "DatabaseSee
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtectedStrikes", "ProtectedStrikes\ProtectedStrikes.csproj", "{4C11CF40-D4CC-4A78-90FF-8470DF99FE57}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikesLibrary.Test", "StrikesLibrary.Test\StrikesLibrary.Test.csproj", "{16059847-0D3C-4FDA-9FC2-559200F92A08}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikesIntegration.Test", "StrikesIntegration.Test\StrikesIntegration.Test.csproj", "{60BBC32E-705E-4CEE-B75D-7FDA23A1E250}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DIBindings", "DIBindings\DIBindings.csproj", "{F10783AE-BE5E-4B0A-9F18-52C971AF375E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesRepository.Test", "StrikesRepository.Test\StrikesRepository.Test.csproj", "{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrikesLibrary.Test", "StrikesLibrary.Test\StrikesLibrary.Test.csproj", "{5D0BAD3B-3D1A-4AEB-881B-471DBC129EFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,6 @@ Global
 		{4C11CF40-D4CC-4A78-90FF-8470DF99FE57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C11CF40-D4CC-4A78-90FF-8470DF99FE57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C11CF40-D4CC-4A78-90FF-8470DF99FE57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{16059847-0D3C-4FDA-9FC2-559200F92A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16059847-0D3C-4FDA-9FC2-559200F92A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16059847-0D3C-4FDA-9FC2-559200F92A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16059847-0D3C-4FDA-9FC2-559200F92A08}.Release|Any CPU.Build.0 = Release|Any CPU
 		{60BBC32E-705E-4CEE-B75D-7FDA23A1E250}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60BBC32E-705E-4CEE-B75D-7FDA23A1E250}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60BBC32E-705E-4CEE-B75D-7FDA23A1E250}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -57,6 +53,10 @@ Global
 		{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61CF6FEB-7589-4CDE-8B94-2331CB3AB556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D0BAD3B-3D1A-4AEB-881B-471DBC129EFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D0BAD3B-3D1A-4AEB-881B-471DBC129EFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D0BAD3B-3D1A-4AEB-881B-471DBC129EFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D0BAD3B-3D1A-4AEB-881B-471DBC129EFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

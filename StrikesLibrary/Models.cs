@@ -1,35 +1,32 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace StrikesLibrary
 {
-    public class Package
+    public interface IValidatable
     {
-        private string _id;
-        private string _name;
 
-        public string id
-        {
-            get => _id;
-
-            set => _id = value;
-        }
-
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                _id = value;
-            }
-        }
-
+    }
+    public class Package : IValidatable
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+        [Required]
+        public string Name { get; set; }
         public string Description { get; set; }
         public string Author { get; set; }
+        [Url]
         public string ProjectPage { get; set; }
+        [Url]
         public string ProjectRepo { get; set; }
         public DateTime CreatedTime { get; set; }
         public Release[] Releases { get; set; }
+
+        public void GenerateId()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
 
     }
 
@@ -59,6 +56,8 @@ namespace StrikesLibrary
         Failed,
         Completed,
     }
+
+
 
     public class PowerPlant
     {

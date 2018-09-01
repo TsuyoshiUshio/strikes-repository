@@ -28,7 +28,7 @@ namespace StrikesLibrary
         {
             var query = client.CreateDocumentQuery<Package>(
                     UriFactory.CreateDocumentCollectionUri(this.databaseId, typeof(Package).Name))
-                .Where(p => p.id == name);
+                .Where(p => p.Id == name);
             return query.FirstOrDefault<Package>();
         }
 
