@@ -59,19 +59,19 @@ namespace StrikesRepository
         [CosmosDB(DATABASE_NAME, COLLECTION_NAME, ConnectionStringSetting = "CosmosDBConnection")] IAsyncCollector<Package> packages,
         ILogger log)
         {
-            var content = await req.ReadAsStringAsync();
-            var model = JsonConvert.DeserializeObject<Package>(content);
-            model.GenerateId();
-            var result = model.Validate();
-            if (result.isValid)
+            var body = await req.GetBodyAsync<Package>();
+            
+            if (body.IsValid)
             {
+                var model = body.Value;
+                model.GenerateId();
                 await packages.AddAsync(model);
              
                 return new CreatedResult($"package/{model.Id}", model);
             }
             else
             {
-                return new BadRequestObjectResult(JsonConvert.SerializeObject(result.validationResults));
+                return new BadRequestObjectResult(JsonConvert.SerializeObject(body.ValidationResults));
             }
         }
 

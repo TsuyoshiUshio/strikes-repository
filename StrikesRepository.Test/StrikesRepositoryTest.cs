@@ -44,7 +44,7 @@ namespace StrikesRepository.Test
         public async Task Create_package_success()
         {
             var fixture = new ParameterFixture();
-            fixture.SetUpCreated();
+            fixture.SetUpCreated(fixture.CreatePackageSuccess);
 
             var result = await StrikesRepository.CreatePackage(fixture.Request, fixture.Collector, fixture.Logger);
             Assert.Equal("CreatedResult", result.GetTypeName());
@@ -53,7 +53,19 @@ namespace StrikesRepository.Test
             var createdResult = (CreatedResult) result;
             Assert.Equal($"package/{fixture.Expected.Id}", (string)createdResult.Location);
             Assert.Equal(fixture.Expected.Id, ((Package)createdResult.Value).Id);
-            fixture.Cleanup();
+            fixture.Cleanup(); // Only in case you use Stream. 
+        }
+
+        [Fact]
+        public async Task Create_package_invalid()
+        {
+            var fixture = new ParameterFixture();
+            fixture.SetUpCreated(fixture.CreatePackageFail);
+            var result = await StrikesRepository.CreatePackage(fixture.Request, fixture.Collector, fixture.Logger);
+            Assert.Equal("BadRequestObjectResult", result.GetTypeName());
+
+            var expected = "[{\"MemberNames\":[\"Name\"],\"ErrorMessage\":\"The Name field is required.\"},{\"MemberNames\":[\"ProjectPage\"],\"ErrorMessage\":\"The ProjectPage field is not a valid fully-qualified http, https, or ftp URL.\"}]";
+            Assert.Equal(expected, ((BadRequestObjectResult)result).Value);
         }
 
 
@@ -85,7 +97,7 @@ namespace StrikesRepository.Test
 
             private Stream _stream;
 
-            public void SetUpCreated()
+            public void SetUpCreated(Func<Package> createPackage)
             {
                 var _input = createPackage();
                 // Setup HttpRequest 
@@ -121,11 +133,20 @@ namespace StrikesRepository.Test
                 _collectorMock.Verify(p => p.AddAsync(_expected, It.IsAny<CancellationToken>()));
             }
 
-            private Package createPackage()
+            internal Package CreatePackageSuccess()
             {
                 return new Package()
                 {
                     Name = "hello"
+                };
+            }
+
+            internal Package CreatePackageFail()
+            {
+                return new Package()
+                {
+                    // No Name (required)
+                    ProjectPage = "abc" // this should be URL
                 };
             }
 

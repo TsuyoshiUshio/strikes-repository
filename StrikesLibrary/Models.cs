@@ -4,11 +4,8 @@ using Newtonsoft.Json;
 
 namespace StrikesLibrary
 {
-    public interface IValidatable
-    {
 
-    }
-    public class Package : IValidatable
+    public class Package
     {
         [JsonProperty("id")]
         public string Id { get; set; }
