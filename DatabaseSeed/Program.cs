@@ -35,14 +35,14 @@ namespace DatabaseSeed
         {
             Console.WriteLine("Strikes DB Seed Client\n");
 
-            Console.WriteLine($"ENV: {CosmosDBContextFactory.COSMOSDB_ENDPOINT_URI}: {CosmosDBContextFactory.EndPointUrl}");
-            Console.WriteLine($"ENV: {CosmosDBContextFactory.COSMOSDB_PRIMARY_KEY} : {CosmosDBContextFactory.PrimaryKey}");
-            Console.WriteLine($"ENV: {CosmosDBContextFactory.COSMOSDB_DATABASE_ID}: {CosmosDBContextFactory.DatabaseId}");
+            Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_ENDPOINT_URI}: {CosmosDBConfiguration.EndPointUrl}");
+            Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_PRIMARY_KEY} : {CosmosDBConfiguration.PrimaryKey}");
+            Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_DATABASE_ID}: {CosmosDBConfiguration.DatabaseId}");
             Console.WriteLine("\nIf one of them was wrong, Please double check Environment Variables or appsettings.json");
 
             var service = _provider.GetRequiredService<PackageService>();
   
-            Console.WriteLine($"I'm deleting \nURL: {CosmosDBContextFactory.EndPointUrl} \n Database: {CosmosDBContextFactory.DatabaseId} \nAre you sure to delete this?");
+            Console.WriteLine($"I'm deleting \nURL: {CosmosDBConfiguration.EndPointUrl} \n Database: {CosmosDBConfiguration.DatabaseId} \nAre you sure to delete this?");
             Console.ReadLine();
 
             await service.InitializeAsync();
@@ -51,6 +51,9 @@ namespace DatabaseSeed
             {
                 await service.CreatePackageAsync(package);
             }
+
+            Console.WriteLine("Seed has been finished.");
+            Console.ReadLine();
         }
     }
 }
