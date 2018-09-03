@@ -1,10 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
-namespace DatabaseSeed
+namespace StrikesLibrary
 {
     public class CosmosDBConfiguration
     {

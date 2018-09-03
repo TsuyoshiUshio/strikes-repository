@@ -12,6 +12,8 @@ namespace StrikesRepository
             var services = new ServiceCollection();
             services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
             services.AddSingleton<IPackageRepository, PackageRepository>();
+
+
             return services.BuildServiceProvider(true);
         }
     }

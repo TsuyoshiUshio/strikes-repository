@@ -25,15 +25,12 @@ namespace StrikesRepository
         [FunctionName("GetPackages")]
             public static async Task<IActionResult> GetPackages(
                 [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "packages")]HttpRequest req,
-                [CosmosDB(
-                    databaseName: "RepositoryDB", 
-                    collectionName: "Package",
-                    ConnectionStringSetting = "")] DocumentClient client,
-                [Inject] IPackageRepository repository,
+                [Inject] ISearchRepository repository,
                 ILogger log)
         {
             var name = req.Query["name"];
-           // This will be replaced by Azure Search. 
+           // This will be replaced by Azure Search.
+           
             return new OkObjectResult(JsonConvert.SerializeObject("hello"));
         }
         // Get Pakcage
