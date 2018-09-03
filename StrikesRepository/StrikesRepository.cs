@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using StrikesLibrary;
 using Microsoft.Azure.Documents.Client;
 using System;
+using System.Net.Http;
 using DIBindings;
 
 namespace StrikesRepository

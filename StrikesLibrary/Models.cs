@@ -1,16 +1,21 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Azure.Search;
+using Microsoft.Azure.Search.Models;
 using Newtonsoft.Json;
 
 namespace StrikesLibrary
 {
-
+    [SerializePropertyNamesAsCamelCase]
     public class Package
     {
+        [System.ComponentModel.DataAnnotations.Key]
         [JsonProperty("id")]
         public string Id { get; set; }
+        [IsSearchable, IsFilterable, IsSortable]
         [Required]
         public string Name { get; set; }
+        [IsSearchable]
         public string Description { get; set; }
         public string Author { get; set; }
         [Url]
@@ -19,6 +24,9 @@ namespace StrikesLibrary
         public string ProjectRepo { get; set; }
         public DateTime CreatedTime { get; set; }
         public Release[] Releases { get; set; }
+
+        // Column for Azure Search soft delete
+        public bool IsDeleted { get; set; }
 
         public void GenerateId()
         {
