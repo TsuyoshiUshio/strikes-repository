@@ -7,15 +7,39 @@ using Newtonsoft.Json;
 namespace StrikesLibrary
 {
     [SerializePropertyNamesAsCamelCase]
-    public class Package
+    public class SearchPackage
     {
         [System.ComponentModel.DataAnnotations.Key]
         [JsonProperty("id")]
         public string Id { get; set; }
         [IsSearchable, IsFilterable, IsSortable]
-        [Required]
+
         public string Name { get; set; }
         [IsSearchable]
+        public string Description { get; set; }
+        public string Author { get; set; }
+
+        public string ProjectPage { get; set; }
+
+        public string ProjectRepo { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public string Releases { get; set; }
+
+        // Column for Azure Search soft delete
+        public bool IsDeleted { get; set; }
+    }
+
+
+
+    public class Package
+    {
+        [System.ComponentModel.DataAnnotations.Key]
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+ 
         public string Description { get; set; }
         public string Author { get; set; }
         [Url]

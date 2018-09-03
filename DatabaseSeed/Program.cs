@@ -26,7 +26,22 @@ namespace DatabaseSeed
             var services = new ServiceCollection();
             services.AddSingleton(typeof(IApplicationDbContext), CosmosDBContextFactory.Create());
             services.AddSingleton<IPackageRepository, PackageRepository>();
+
+            services.AddSingleton(typeof(AzureSearchServiceContext),
+                new AzureSearchServiceContext(
+                    AzureSearchConfiguration.SearchServiceName,
+                    AzureSearchConfiguration.SearchAdminApiKey,
+                    CosmosDBConfiguration.EndPointUrl,
+                    CosmosDBConfiguration.PrimaryKey,
+                    CosmosDBConfiguration.DatabaseId,
+                    LoggingFactory.Logger                
+                    )
+            );
+            services.AddSingleton<ISearchRepository, SearchRepository>();
+            services.AddSingleton<SearchService, SearchService>();
+
             services.AddSingleton<PackageService, PackageService>();
+
             _provider = services.BuildServiceProvider();
 
         }
@@ -38,19 +53,24 @@ namespace DatabaseSeed
             Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_ENDPOINT_URI}: {CosmosDBConfiguration.EndPointUrl}");
             Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_PRIMARY_KEY} : {CosmosDBConfiguration.PrimaryKey}");
             Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_DATABASE_ID}: {CosmosDBConfiguration.DatabaseId}");
+            Console.WriteLine($"ENV: {AzureSearchConfiguration.SEARCH_SEARCH_SERVICE_NAME}: {AzureSearchConfiguration.SearchServiceName}");
+            Console.WriteLine($"ENV: {AzureSearchConfiguration.SEARCH_ADMIN_API_KEY}: {AzureSearchConfiguration.SearchAdminApiKey}");
             Console.WriteLine("\nIf one of them was wrong, Please double check Environment Variables or appsettings.json");
 
-            var service = _provider.GetRequiredService<PackageService>();
-  
+            var packageService = _provider.GetRequiredService<PackageService>();
+            var searchService = _provider.GetRequiredService<SearchService>();
+
             Console.WriteLine($"I'm deleting \nURL: {CosmosDBConfiguration.EndPointUrl} \n Database: {CosmosDBConfiguration.DatabaseId} \nAre you sure to delete this?");
             Console.ReadLine();
 
-            await service.InitializeAsync();
+            await packageService.InitializeAsync();
 
             foreach (var package in PackageFixture.GenerateTestFixture())
             {
-                await service.CreatePackageAsync(package);
+                await packageService.CreatePackageAsync(package);
             }
+
+            await searchService.CreateIndexWithIndexerAsync();
 
             Console.WriteLine("Seed has been finished.");
             Console.ReadLine();

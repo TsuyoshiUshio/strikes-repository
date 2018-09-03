@@ -24,7 +24,7 @@ namespace DatabaseSeed
             var config = setupConfig();
 
             _searchServiceName = config[SEARCH_SEARCH_SERVICE_NAME];
-            _adminApiKey = config[SEARCH_SEARCH_SERVICE_NAME];
+            _adminApiKey = config[SEARCH_ADMIN_API_KEY];
 
         }
 

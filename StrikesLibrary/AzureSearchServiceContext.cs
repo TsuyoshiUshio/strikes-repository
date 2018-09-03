@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 using System.Linq;
@@ -17,6 +17,8 @@ namespace StrikesLibrary
         private readonly SearchServiceClient _client;
         private readonly SearchIndexClient _indexClient;
         private const string INDEX_NAME = "packages";
+        private const string DATASOURCE_NAME = "cosmosds";
+        private const string INDEXER_NAME = "packageidx";
         private readonly string _cosmosDBEndpointUri;
         private readonly string _cosmosDBKey;
         private readonly string _databaseId;
@@ -47,9 +49,9 @@ namespace StrikesLibrary
             var definition = new Index()
             {
                 Name = INDEX_NAME,
-                Fields = FieldBuilder.BuildForType<Package>()
+                Fields = FieldBuilder.BuildForType<SearchPackage>()
             };
-            var index = await _client.Indexes.CreateAsync(definition);
+            await _client.Indexes.CreateOrUpdateWithHttpMessagesAsync(INDEX_NAME, definition);
         }
         private async Task CreateDataSourceAsync()
         {
@@ -60,7 +62,7 @@ namespace StrikesLibrary
             var dataDeletionDetectionPolicy = new SoftDeleteColumnDeletionDetectionPolicy("IsDeleted", true);
 
             var dataSource = new DataSource(
-                "cosmosDataSource", 
+                DATASOURCE_NAME, 
                 DataSourceType.DocumentDb, 
                 dataSourceCredentials, 
                 dataContainer,"Strikes CosmosDB Settings", 
@@ -73,8 +75,8 @@ namespace StrikesLibrary
         // This method requires index and datasource
         private async Task CreateIndexerAsync()
         {
-            var indexSchedule = new IndexingSchedule(TimeSpan.FromHours(1),DateTimeOffset.Now);
-            var indexer = new Indexer("packageIndexer","cosmosDataSource",INDEX_NAME, "hourly scheduled", indexSchedule);
+            var indexSchedule = new IndexingSchedule(TimeSpan.FromMinutes(30),DateTimeOffset.Now);
+            var indexer = new Indexer(INDEXER_NAME, DATASOURCE_NAME, INDEX_NAME, "hourly scheduled", indexSchedule);
             await _client.Indexers.CreateOrUpdateWithHttpMessagesAsync(indexer);
         }
 
@@ -94,15 +96,15 @@ namespace StrikesLibrary
             }
             catch (Exception e) // TODO Identify Which error has been thrown if there is no index.
             {
-                _logger.WarnFormat($"Delete index failed. {INDEX_NAME} doesn't exists. Message: {e.Message}");
+                _logger.LogWarning($"Delete index failed. {INDEX_NAME} doesn't exists. Message: {e.Message}");
             }
         }
 
-        public async Task<IEnumerable<Package>> SearchAsync(string query)
+        public async Task<IEnumerable<SearchPackage>> SearchAsync(string query)
         {
             var parameters = new SearchParameters();
-            var results = await _indexClient.Documents.SearchAsync<Package>(query, parameters);
-            return results.Results.Select<SearchResult<Package>, Package>(p => p.Document);
+            var results = await _indexClient.Documents.SearchAsync<SearchPackage>(query, parameters);
+            return results.Results.Select<SearchResult<SearchPackage>, SearchPackage>(p => p.Document);
         }
 
         private string GetCosmosDBConnectionString()
