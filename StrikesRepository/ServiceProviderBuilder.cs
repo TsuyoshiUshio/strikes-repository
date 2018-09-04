@@ -1,6 +1,8 @@
 ﻿using DIBindings;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.Azure.WebJobs.Logging;
+using Microsoft.Extensions.Logging;
 using StrikesLibrary;
 
 namespace StrikesRepository
@@ -17,7 +19,7 @@ namespace StrikesRepository
                     CosmosDBConfiguration.EndPointUrl,
                     CosmosDBConfiguration.PrimaryKey,
                     CosmosDBConfiguration.DatabaseId,
-                    null
+                    LoggerFactory.CreateLogger(LogCategories.CreateTriggerCategory("Http"))
                 )
             );
             services.AddSingleton<ISearchRepository, SearchRepository>();
@@ -25,5 +27,7 @@ namespace StrikesRepository
 
             return services.BuildServiceProvider(true);
         }
+
+        public ILoggerFactory LoggerFactory { get; set; }
     }
 }

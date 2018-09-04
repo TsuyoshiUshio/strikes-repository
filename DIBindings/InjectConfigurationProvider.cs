@@ -5,18 +5,24 @@ using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Azure.WebJobs.Host.Config;
 using System.Reflection;
 using Microsoft.Azure.WebJobs.Description;
+using Microsoft.Extensions.Logging;
 
 namespace DIBindings
 {
     [Extension("Inject")]
     public class InjectConfigurationProvider : IExtensionConfigProvider
     {
+        private ILoggerFactory _loggerFactory;
+        public InjectConfigurationProvider(ILoggerFactory loggerFactory)
+        {
+            _loggerFactory = loggerFactory;
+        }
+
         public void Initialize(ExtensionConfigContext context)
         {
             context
                 .AddBindingRule<InjectAttribute>()
-                .Bind(new InjectBindingProvider());
-           
+                .Bind(new InjectBindingProvider(_loggerFactory));
             var registry = context.GetExtensionRegistry();
             var filter = new ScopeCleanupFilter();
             registry.RegisterExtension(typeof(IFunctionInvocationFilter), filter);

@@ -8,6 +8,7 @@ using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace DIBindings
 {
@@ -16,8 +17,11 @@ namespace DIBindings
         public static readonly ConcurrentDictionary<Guid, IServiceScope> Scopes = new ConcurrentDictionary<Guid, IServiceScope>();
 
         private IServiceProvider serviceProvider;
-
-
+        private ILoggerFactory _loggerFactory;
+        public InjectBindingProvider(ILoggerFactory loggerFactory)
+        {
+            _loggerFactory = loggerFactory;
+        }
         public Task<IBinding> TryCreateAsync(BindingProviderContext context)
         {
             if (this.serviceProvider == null)
@@ -30,6 +34,7 @@ namespace DIBindings
         private IServiceProvider CreateServiceProvider(Assembly assembly)
         {
             var builder = ServiceProviderBuilderHelper.GetBuilder(assembly);
+            builder.LoggerFactory = _loggerFactory;
             return builder.BuildServiceProvider();
         }
     }
