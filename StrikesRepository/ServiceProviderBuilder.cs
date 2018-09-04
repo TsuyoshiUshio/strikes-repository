@@ -10,8 +10,17 @@ namespace StrikesRepository
         public IServiceProvider BuildServiceProvider()
         {
             var services = new ServiceCollection();
-            services.AddSingleton<IApplicationDbContext, ApplicationDbContext>();
-            services.AddSingleton<IPackageRepository, PackageRepository>();
+            services.AddSingleton(typeof(AzureSearchServiceContext),
+                new AzureSearchServiceContext(
+                    AzureSearchConfiguration.SearchServiceName,
+                    AzureSearchConfiguration.SearchAdminApiKey,
+                    CosmosDBConfiguration.EndPointUrl,
+                    CosmosDBConfiguration.PrimaryKey,
+                    CosmosDBConfiguration.DatabaseId,
+                    null
+                )
+            );
+            services.AddSingleton<ISearchRepository, SearchRepository>();
 
 
             return services.BuildServiceProvider(true);
