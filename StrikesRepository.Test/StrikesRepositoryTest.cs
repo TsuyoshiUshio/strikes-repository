@@ -13,6 +13,8 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Newtonsoft.Json;
 using System.IO;
+using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.Primitives;
 
 namespace StrikesRepository.Test
 {
@@ -68,7 +70,11 @@ namespace StrikesRepository.Test
             Assert.Equal(expected, ((BadRequestObjectResult)result).Value);
         }
 
+        [Fact]
+        public async Task Get_Packages_normalcase()
+        {
 
+        }
 
         private class ParameterFixture
         {
