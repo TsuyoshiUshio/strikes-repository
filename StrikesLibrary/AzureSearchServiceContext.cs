@@ -100,9 +100,10 @@ namespace StrikesLibrary
             }
         }
 
-        public async Task<IEnumerable<SearchPackage>> SearchAsync(string query)
+        public async Task<IEnumerable<SearchPackage>> SearchAsync(string query, List<string> searchFields)
         {
             var parameters = new SearchParameters();
+            parameters.SearchFields = searchFields;
             var results = await _indexClient.Documents.SearchAsync<SearchPackage>(query, parameters);
             return results.Results.Select<SearchResult<SearchPackage>, SearchPackage>(p => p.Document);
         }

@@ -9,7 +9,7 @@ namespace StrikesLibrary
     {
         Task CreateIndexWithCosmosIndexerAsync();
         Task DeleteIndexAsync();
-        Task<IEnumerable<SearchPackage>> SearchAsync(string query);
+        Task<IEnumerable<SearchPackage>> SearchAsync(string name, List<string> searchFields);
     }
 
     public class SearchRepository : ISearchRepository
@@ -32,9 +32,9 @@ namespace StrikesLibrary
             return _context.DeleteIndexAsync();
         }
 
-        public Task<IEnumerable<SearchPackage>> SearchAsync(string query)
+        public Task<IEnumerable<SearchPackage>> SearchAsync(string name, List<string> searchFields)
         {
-            return _context.SearchAsync(query);
+            return _context.SearchAsync(name, searchFields);
         }
     }
 }

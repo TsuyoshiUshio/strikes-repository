@@ -25,13 +25,14 @@ namespace StrikesRepository
         [FunctionName("GetPackages")]
             public static async Task<IActionResult> GetPackages(
                 [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "packages")]HttpRequest req,
-                [Inject] ISearchRepository repository,
+                [Inject] SearchService service,
                 ILogger log)
         {
             var name = req.Query["name"];
-           // This will be replaced by Azure Search.
+            log.LogInformation(($"Query: {name}"));
+            var results = await service.SearchNameAsync(name);
            
-            return new OkObjectResult(JsonConvert.SerializeObject("hello"));
+            return new OkObjectResult(JsonConvert.SerializeObject(results));
         }
         // Get Pakcage
         [FunctionName("GetPackage")]

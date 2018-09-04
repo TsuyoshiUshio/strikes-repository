@@ -23,6 +23,7 @@ namespace StrikesRepository
                 )
             );
             services.AddSingleton<ISearchRepository, SearchRepository>();
+            services.AddSingleton<SearchService, SearchService>();
 
 
             return services.BuildServiceProvider(true);
