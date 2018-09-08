@@ -6,7 +6,11 @@ using StrikesLibrary;
 
 namespace StrikesRepository
 {
-    public class SearchService
+    public interface ISearchService
+    {
+        Task<IEnumerable<SearchPackage>> SearchNameAsync(string name);
+    }
+    public class SearchService :ISearchService
     {
         private ISearchRepository _repository;
         public SearchService(ISearchRepository repository)

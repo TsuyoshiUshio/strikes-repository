@@ -25,7 +25,7 @@ namespace StrikesRepository
         [FunctionName("GetPackages")]
             public static async Task<IActionResult> GetPackages(
                 [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "packages")]HttpRequest req,
-                [Inject] SearchService service,
+                [Inject] ISearchService service,
                 ILogger log)
         {
             var name = req.Query["name"];

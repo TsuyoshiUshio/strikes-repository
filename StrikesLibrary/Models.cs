@@ -102,5 +102,11 @@ namespace StrikesLibrary
         public DateTime UpdatedTime { get; set; }
     }
 
+    public class RepositoryAccessToken {
+        public string StorageAccountName { get; set; }
+        public string ContainerName { get; set; }
+        public string SASQueryParameter { get; set; }
+    }
+
 
 }

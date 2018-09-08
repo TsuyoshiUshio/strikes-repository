@@ -3,18 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Azure.WebJobs;
+using Microsoft.WindowsAzure.Storage;
 
 namespace StrikesLibrary
 {
-    public interface IStorageAccount
+    public interface ICloudStorageAccount
     {
         ICloudBlobClient CreateCloudBlobClient();
     } 
-    public class StorageAccountWrapper : IStorageAccount
+    public class CloudStorageAccountWrapper : ICloudStorageAccount
     {
-        private StorageAccount _storageAccount;
+        private readonly CloudStorageAccount _storageAccount;
 
-        public StorageAccountWrapper(StorageAccount account)
+        public CloudStorageAccountWrapper(CloudStorageAccount account)
         {
             _storageAccount = account;
         }
@@ -31,7 +32,7 @@ namespace StrikesLibrary
 
     public class CloudBlobClientWrapper : ICloudBlobClient
     {
-        private CloudBlobClient _client;
+        private readonly CloudBlobClient _client;
         public CloudBlobClientWrapper(CloudBlobClient client)
         {
             _client = client;
@@ -49,7 +50,7 @@ namespace StrikesLibrary
 
     public class CloudBlobContainerWrapper : ICloudBlobContainer
     {
-        private CloudBlobContainer _container;
+        private readonly CloudBlobContainer _container;
         public CloudBlobContainerWrapper(CloudBlobContainer container)
         {
             _container = container;

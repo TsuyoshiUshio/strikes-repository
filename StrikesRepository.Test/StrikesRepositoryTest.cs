@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Newtonsoft.Json;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Primitives;
 
@@ -71,9 +73,13 @@ namespace StrikesRepository.Test
         }
 
         [Fact]
-        public async Task Get_Packages_normalcase()
+        public async Task Get_Packages_normal_case()
         {
-
+            var fixture = new ParameterFixture();
+            fixture.SetUpGetPackages();
+            var result = await StrikesRepository.GetPackages(fixture.Request, fixture.SearchService, fixture.Logger);
+            fixture.VerifyGetPackages();
+            Assert.Equal(fixture.ExpectedGetPackagesName, result.GetSearchPackages().ToArray()[0].Name);
         }
 
         private class ParameterFixture
@@ -81,6 +87,7 @@ namespace StrikesRepository.Test
             private Mock<HttpRequest> _requestMock;
             private Mock<ILogger> _loggerMock;
             private Mock<IAsyncCollector<Package>> _collectorMock;
+            private Mock<ISearchService> _searchServiceMock;
 
             public HttpRequest Request => _requestMock.Object;
 
@@ -88,11 +95,14 @@ namespace StrikesRepository.Test
 
             public IAsyncCollector<Package> Collector => _collectorMock.Object;
 
+            public ISearchService SearchService => _searchServiceMock.Object;
+
             public ParameterFixture()
             {
                 _requestMock = new Mock<HttpRequest>();
                 _loggerMock = new Mock<ILogger>();
                 _collectorMock = new Mock<IAsyncCollector<Package>>();
+                _searchServiceMock = new Mock<ISearchService>();
             }
 
             private Package _input;
@@ -117,6 +127,31 @@ namespace StrikesRepository.Test
                     {
                         _expected = p;
                     }); 
+
+            }
+
+            private const string ExpectedPackageName = "foo";
+            public string ExpectedGetPackagesName => ExpectedPackageName;
+
+            public void SetUpGetPackages()
+            {
+                var queryCollection = new Mock<IQueryCollection>();
+                queryCollection.Setup(q => q["name"]).Returns(new Microsoft.Extensions.Primitives.StringValues("h*"));
+                _requestMock.Setup(r => r.Query).Returns(queryCollection.Object);
+                var packageList = new List<SearchPackage>
+                {
+                    new SearchPackage()
+                    {
+                        Name = ExpectedPackageName
+                    }
+                };
+                _searchServiceMock.Setup(s => s.SearchNameAsync("h*")).ReturnsAsync(packageList);
+
+            }
+
+            public void VerifyGetPackages()
+            {
+                _searchServiceMock.Verify(s => s.SearchNameAsync("h*"));
             }
 
             public void Cleanup()
@@ -170,6 +205,13 @@ namespace StrikesRepository.Test
         internal static string GetPackageName(this IActionResult result)
         {
             return ((Package) ((OkObjectResult) result).Value).Name;
+        }
+
+        internal static IEnumerable<SearchPackage> GetSearchPackages(this IActionResult result)
+        {
+             var json =  (string)((OkObjectResult) result).Value;
+            return JsonConvert.DeserializeObject<IEnumerable<SearchPackage>>(json);
+
         }
 
     }
