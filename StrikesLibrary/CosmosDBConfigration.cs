@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using System.IO;
@@ -14,9 +15,9 @@ namespace StrikesLibrary
 
         private const string CONFIG_FILE_NAME = "appsettings.json";
 
-        public const string COSMOSDB_ENDPOINT_URI = "COSMOSDB_ENDPOINT_URI";
-        public const string COSMOSDB_PRIMARY_KEY = "COSMOSDB_PRIMARY_KEY";
         public const string COSMOSDB_DATABASE_ID = "COSMOSDB_DATABASE_ID";
+
+        public const string COSMOSDB_CONNECTION_STRING = "CosmosDBConnection";
 
         public static string EndPointUrl => _endpointUri;
         public static string PrimaryKey => _primaryKey;
@@ -27,10 +28,34 @@ namespace StrikesLibrary
             var config = setupConfig();
 
             _databaseId = config[COSMOSDB_DATABASE_ID];
-            _primaryKey = config[COSMOSDB_PRIMARY_KEY];
-            _endpointUri = config[COSMOSDB_ENDPOINT_URI];
-
+            _primaryKey = parsePrimaryKey(config[COSMOSDB_CONNECTION_STRING]);
+            _endpointUri = parseEndpointUrl(config[COSMOSDB_CONNECTION_STRING]);
         }
+
+        private static string parseConnectionString(string connectionString, string keyword)
+        {
+            foreach (var s in connectionString.Split(';'))
+            {
+                if (s.StartsWith(keyword))
+                {
+                    return s.Substring(keyword.Length);
+                }
+            }
+
+            return null;
+        }
+
+        private static string parseEndpointUrl(string connectionString)
+        {
+            var EndpointHeader = "AccountEndpoint=";
+            return parseConnectionString(connectionString, EndpointHeader);
+        }
+        private static string parsePrimaryKey(string connectionString)
+        {
+            var PrimaryKeyHeader = "AccountKey=";
+            return parseConnectionString(connectionString, PrimaryKeyHeader);
+        }
+
 
         private static IConfigurationRoot setupConfig()
         {
