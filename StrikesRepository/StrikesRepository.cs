@@ -12,6 +12,7 @@ using StrikesLibrary;
 using Microsoft.Azure.Documents.Client;
 using System;
 using System.Net.Http;
+using System.Web.Http;
 using DIBindings;
 
 namespace StrikesRepository
@@ -94,13 +95,29 @@ namespace StrikesRepository
             return new OkObjectResult($"Result!");
         }
 
-        // Fetch the BlobServer address from AppSettings : TODO change terraform.tf
-        [FunctionName("GetAssertServerUri")]
-        public static async Task<IActionResult> GetRepositoryBaseUri(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "assetserveruri")]
-            HttpRequest req, ILogger log)
+        [FunctionName("GetRepositoryAccessToken")]
+        public static IActionResult GetRepositoryAccessToken(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "repositoryAccessToken")] HttpRequest req,
+            [Inject] IStorageAccountRepository repository,
+            ILogger log)
         {
-            return new OkObjectResult($"Result!");
+            RepositoryAccessToken token;
+            try
+            {
+                token = new RepositoryAccessToken
+                {
+                    StorageAccountName = repository.GetStorageAccountName(),
+                    ContainerName = Repository.ContainerName,
+                    SASQueryParameter = repository.GetSASQueryParameterForWrite(Repository.ContainerName)
+                };
+            }
+            catch (Exception e)
+            {
+                log.LogError(e, "Can not create Repository Access Token.");
+                return new ExceptionResult(e, false); 
+            }
+
+            return new OkObjectResult(token);
         }
 
     }

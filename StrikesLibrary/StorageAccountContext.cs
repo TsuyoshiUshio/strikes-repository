@@ -11,7 +11,8 @@ namespace StrikesLibrary
 {
     public interface IStorageAccountContext
     {
-
+        string GetSASQueryParameterForWrite(string containerName);
+        string GetStorageAccountName();
     }
     public class StorageAccountContext
     {

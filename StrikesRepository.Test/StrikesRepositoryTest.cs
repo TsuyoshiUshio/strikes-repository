@@ -82,6 +82,25 @@ namespace StrikesRepository.Test
             Assert.Equal(fixture.ExpectedGetPackagesName, result.GetSearchPackages().ToArray()[0].Name);
         }
 
+        [Fact]
+        public void Get_Repository_accesss_token()
+        {
+            var fixture = new StorageFixture();
+            fixture.SetUp();
+            var result = StrikesRepository.GetRepositoryAccessToken(
+                fixture.Request,
+                fixture.Repository,
+                fixture.Logger);
+            fixture.Verify();
+            var token = (RepositoryAccessToken)((OkObjectResult)result).Value;
+            Assert.Equal(fixture.ExpectedStorageAccountName, token.StorageAccountName);
+            Assert.Equal(fixture.ExpectedSasQueryParameters, token.SASQueryParameter);
+
+
+
+
+        }
+
         private class ParameterFixture
         {
             private Mock<HttpRequest> _requestMock;
@@ -193,6 +212,49 @@ namespace StrikesRepository.Test
 
         }
 
+
+        /// <summary>
+        /// [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "repositoryAccessToken")] HttpRequest req,
+        /// [Inject] IStorageAccountRepository repository,
+        ///    ILogger log)
+        /// </summary>
+        private class StorageFixture
+        {
+            private Mock<HttpRequest> _request;
+            private Mock<IStorageAccountRepository> _repository;
+            private Mock<ILogger> _logger;
+
+            public HttpRequest Request => _request.Object;
+            public IStorageAccountRepository Repository => _repository.Object;
+            public ILogger Logger => _logger.Object;
+
+            public StorageFixture()
+            {
+                _request = new Mock<HttpRequest>();
+                _repository = new Mock<IStorageAccountRepository>();
+                _logger = new Mock<ILogger>();
+            }
+
+            public string ExpectedStorageAccountName { get; set; }
+            public string ExpectedSasQueryParameters { get; set; }
+            public void SetUp()
+            {
+                ExpectedStorageAccountName = "foo";
+                ExpectedSasQueryParameters = "sv=2015-04-05&st=2015-04-29T22%3A18%3A26Z&se=2015-04-30T02%3A23%3A26Z&sr=b&sp=rw&sip=168.1.5.60-168.1.5.70&spr=https&sig=Z%2FRHIX5Xcg0Mq2rqI3OlWTjEg2tYkboXr1P9ZUXDtkk%3D";
+                _repository.Setup(r => r.GetStorageAccountName()).Returns(ExpectedStorageAccountName);
+                _repository.Setup(r => r.GetSASQueryParameterForWrite(StrikesLibrary.Repository.ContainerName)).Returns(
+                    ExpectedSasQueryParameters);
+            }
+
+            public void Verify()
+            {
+                _repository.Verify(r => r.GetStorageAccountName());
+                _repository.Verify(r => r.GetSASQueryParameterForWrite(StrikesLibrary.Repository.ContainerName));
+            }
+
+
+
+        }
 
     }
     internal static class ActionResultExtension

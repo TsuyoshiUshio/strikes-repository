@@ -102,6 +102,11 @@ namespace StrikesLibrary
         public DateTime UpdatedTime { get; set; }
     }
 
+    public class Repository
+    {
+        public const string ContainerName = "repository";
+    }
+
     public class RepositoryAccessToken {
         public string StorageAccountName { get; set; }
         public string ContainerName { get; set; }

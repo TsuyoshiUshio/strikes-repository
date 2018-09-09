@@ -22,8 +22,16 @@ namespace StrikesRepository
                     LoggerFactory.CreateLogger(LogCategories.CreateTriggerCategory("Http"))
                 )
             );
+
+            // SearchService
             services.AddSingleton<ISearchRepository, SearchRepository>();
             services.AddSingleton<ISearchService, SearchService>();
+            // StorageAccountRepoistory
+            services.AddSingleton<IStorageAccountRepository, StorageAccountRepository>();
+            services.AddSingleton(typeof(IStorageAccountContext),
+                new StorageAccountContext(
+                    LoggerFactory.CreateLogger(LogCategories.CreateTriggerCategory("Http"))));
+
 
 
             return services.BuildServiceProvider(true);
