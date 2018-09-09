@@ -13,9 +13,11 @@ namespace DIBindings
     public class InjectConfigurationProvider : IExtensionConfigProvider
     {
         private ILoggerFactory _loggerFactory;
-        public InjectConfigurationProvider(ILoggerFactory loggerFactory)
+        private IExtensionRegistry _registry;
+        public InjectConfigurationProvider(ILoggerFactory loggerFactory, IExtensionRegistry registry)
         {
             _loggerFactory = loggerFactory;
+            _registry = registry;
         }
 
         public void Initialize(ExtensionConfigContext context)
@@ -23,22 +25,9 @@ namespace DIBindings
             context
                 .AddBindingRule<InjectAttribute>()
                 .Bind(new InjectBindingProvider(_loggerFactory));
-            var registry = context.GetExtensionRegistry();
             var filter = new ScopeCleanupFilter();
-            registry.RegisterExtension(typeof(IFunctionInvocationFilter), filter);
-            registry.RegisterExtension(typeof(IFunctionExceptionFilter), filter);
+            _registry.RegisterExtension(typeof(IFunctionInvocationFilter), filter);
+            _registry.RegisterExtension(typeof(IFunctionExceptionFilter), filter);
         }
     }
-
-    public static class ExtensionConfigContextExtensions
-    {
-        public static IExtensionRegistry GetExtensionRegistry(this ExtensionConfigContext context)
-        {
-            // private readonly IExtensionRegistry _extensionRegistry;
-            var field = context.GetType().GetField("_extensionRegistry",
-                BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance);
-            return (IExtensionRegistry)field.GetValue(context);
-        }
-    }
-
 }
