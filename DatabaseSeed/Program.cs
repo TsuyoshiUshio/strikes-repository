@@ -50,8 +50,8 @@ namespace DatabaseSeed
         {
             Console.WriteLine("Strikes DB Seed Client\n");
 
-            Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_ENDPOINT_URI}: {CosmosDBConfiguration.EndPointUrl}");
-            Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_PRIMARY_KEY} : {CosmosDBConfiguration.PrimaryKey}");
+            Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_CONNECTION_STRING}: {CosmosDBConfiguration.EndPointUrl}");
+            Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_CONNECTION_STRING} : {CosmosDBConfiguration.PrimaryKey}");
             Console.WriteLine($"ENV: {CosmosDBConfiguration.COSMOSDB_DATABASE_ID}: {CosmosDBConfiguration.DatabaseId}");
             Console.WriteLine($"ENV: {AzureSearchConfiguration.SEARCH_SEARCH_SERVICE_NAME}: {AzureSearchConfiguration.SearchServiceName}");
             Console.WriteLine($"ENV: {AzureSearchConfiguration.SEARCH_ADMIN_API_KEY}: {AzureSearchConfiguration.SearchAdminApiKey}");
