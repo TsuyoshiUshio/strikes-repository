@@ -12,14 +12,17 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-
-- script: dotnet test StrikesLibrary.Test\StrikesLibrary.Test.csproj --logger trx --collect "Code coverage"
-- script: dotnet test StrikesRepository.Test\StrikesRepository.Test.csproj --logger trx --collect "Code coverage"
-- script: dotnet test StrikesIntegration.Test\StrikesIntegration.Test.csproj --logger trx --collect "Code coverage"
+- script: dotnet tool install --global dotnet-reportgenerator-globaltool --version 4.0.0-rc4
+- script: mkdir results
+- script: dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='.\results'
 - task: PublishTestResults@2
   inputs:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
+- task: PublishCodeCoverageResults@1
+  inputs:
+    summaryFileLocation: .\results
+    codecoverageTool: cobertura
 
 - task: DotNetCoreCLI@2
   inputs:
