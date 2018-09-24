@@ -34,7 +34,9 @@ steps:
   inputs:
     command: publish
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    projects: StrikesRepository/StrikesRepository.csproj
     publishWebProjects: false
+    modifyOutputPath: true
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
