@@ -16,7 +16,7 @@ steps:
 - script: dotnet test StrikesLibrary.Test\StrikesLibrary.Test.csproj --logger trx --collect "Code coverage"
 - script: dotnet test StrikesRepository.Test\StrikesRepository.Test.csproj --logger trx --collect "Code coverage"
 - script: dotnet test StrikesIntegration.Test\StrikesIntegration.Test.csproj --logger trx --collect "Code coverage"
-- task: PublishTestResult@2
+- task: PublishTestResults@2
   inputs:
     testRunner: VSTest
     testResultsFiles: '**/*.trx'
