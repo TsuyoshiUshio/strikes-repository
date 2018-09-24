@@ -14,10 +14,11 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 - script: |
     mkdir $(Build.SourcesDirectory)\results
-    dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results\ StrikesLibrary.Test
-    dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:MergeWtih=$(Build.SourcesDirectory)\results\coverage.cobertura.xml StrikesRepository.Test
+    dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura  StrikesLibrary.Test
+    dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:MergeWtih=$(Build.SourcesDirectory)\StrikesLibrary.Test\coverage.cobertura.xml StrikesRepository.Test
+    copy /p:MergeWtih=$(Build.SourcesDirectory)\StrikesLibrary.Test\coverage.cobertura.xml $(Build.SourcesDirectory)\results
     dotnet tool install dotnet-reportgenerator-globaltool --tool-path . --version 4.0.0-rc4
-    .\reportgenerator "-reports:$(Build.SourcesDirectory)\results\coverage.cobertura.xml" "-targetdir:results" "-reporttypes:HTMLInline;HTMLChart"
+    .\reportgenerator "-reports:$(Build.SourcesDirectory)\StrikesRepository.Test\coverage.cobertura.xml" "-targetdir:results" "-reporttypes:HTMLInline;HTMLChart"
   displayName: 'Unit testing'
 - task: PublishTestResults@2
   inputs:
