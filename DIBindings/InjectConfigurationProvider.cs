@@ -13,7 +13,6 @@ namespace DIBindings
     public class InjectConfigurationProvider : IExtensionConfigProvider
     {
         private ILoggerFactory _loggerFactory;
-
         public InjectConfigurationProvider(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory;
