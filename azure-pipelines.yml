@@ -16,7 +16,7 @@ steps:
 - script: mkdir $(Build.SourcesDirectory)\results
 - script: dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)\results\ StrikesLibrary.Test
 - script: type $(Build.SourcesDirectory)\results\coverage.cobertura.xml
-- script: dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:MergeWith="$(Build.SourcesDirectory)\results\coverage.cobertura.xml" StrikesRepository.Test
+- script: dotnet test --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura  StrikesRepository.Test
 - script: reportgenerator "-reports:$(Build.SourcesDirectory)\results\coverage.cobertura.xml" "-targetdir:results" "-reporttypes:HTML;HTMLChart"
 - task: PublishTestResults@2
   inputs:
