@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Azure.Documents;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +40,9 @@ namespace StrikesLibrary
 
         public async Task CreatePackageCollectionAsync()
         {
-            await dbContext.CreateDocumentCollectionIfNotExistsAsync<Package>();
+            var policy = new UniqueKeyPolicy();
+            policy.AddUniqueKey("/Name");
+            await dbContext.CreateDocumentCollectionIfNotExistsAsync<Package>(policy);
         }
 
         public async Task CreatePackageAsync(Package package)

@@ -14,6 +14,8 @@ using System;
 using System.Net.Http;
 using System.Web.Http;
 using DIBindings;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StrikesRepository
 {
@@ -38,10 +40,15 @@ namespace StrikesRepository
         // Get Pakcage
         [FunctionName("GetPackage")]
         public static async Task<IActionResult> GetPackage(
-                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "package/{id}")]HttpRequest req,
-                [CosmosDB(DATABASE_NAME, COLLECTION_NAME, ConnectionStringSetting = "CosmosDBConnection", Id = "{id}")] object document,
+                [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "package/name/{name}")]HttpRequest req,
+                [CosmosDB(DATABASE_NAME, 
+                        COLLECTION_NAME, 
+                        ConnectionStringSetting = "CosmosDBConnection",
+                        SqlQuery = "select * from Package p where p.Name = {name}")] IEnumerable<Package> pkgs,
                 ILogger log)
         {
+            // name has the unique key constratint.
+            var document = pkgs.FirstOrDefault<Package>();
             if (document == null)
             {
                 return new NotFoundObjectResult(document);

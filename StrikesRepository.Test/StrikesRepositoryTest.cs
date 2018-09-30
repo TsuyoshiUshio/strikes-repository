@@ -26,12 +26,14 @@ namespace StrikesRepository.Test
         public async Task Get_package_with_a_parameter()
         {
             var fixture = new ParameterFixture();
+            var pkgs = new List<Package>();
             var document = new Package()
             {
                 Name = "ushio",
             };
+            pkgs.Add(document);
 
-            var result = await StrikesRepository.GetPackage(fixture.Request, document , fixture.Logger);
+            var result = await StrikesRepository.GetPackage(fixture.Request, pkgs , fixture.Logger);
             Assert.Equal("OkObjectResult", result.GetTypeName());
             Assert.Equal("ushio", result.GetPackageName());           
         }
@@ -40,7 +42,8 @@ namespace StrikesRepository.Test
         public async Task Get_package_with_null_return_object()
         {
             var fixture = new ParameterFixture();
-            var result = await StrikesRepository.GetPackage(fixture.Request, null, fixture.Logger);
+            var pkgs = new List<Package>();
+            var result = await StrikesRepository.GetPackage(fixture.Request, pkgs, fixture.Logger);
             Assert.Equal("NotFoundObjectResult", result.GetTypeName());
         }
 
