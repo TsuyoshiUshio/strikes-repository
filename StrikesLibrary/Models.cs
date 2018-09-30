@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.Azure.Search;
 using Microsoft.Azure.Search.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace StrikesLibrary
 {
@@ -69,6 +70,7 @@ namespace StrikesLibrary
     {
         public string Version { get; set; }
         public string ReleaseNote { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
         public ProviderType ProviderType { get; set; }
 
         public DateTime CreatedTime { get; set; }
