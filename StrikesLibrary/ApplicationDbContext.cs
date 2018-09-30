@@ -17,6 +17,7 @@ namespace StrikesLibrary
     {
         Package GetPackage(string name);
         Task CreateDocumentCollectionIfNotExistsAsync<T>();
+        Task CreateDocumentCollectionIfNotExistsAsync<T>(UniqueKeyPolicy uniqueKeyPolicy);
         Task CreateDocumentAsync<T>(T document);
         Task CreateDatabaseIfNotExistsAsync();
         Task DeleteDatabaseIfExistsAsync();
@@ -25,15 +26,15 @@ namespace StrikesLibrary
     }
     public class ApplicationDbContext : IApplicationDbContext
     {
-        private readonly DocumentClient _client;
+        private readonly IDocumentClient _client;
         private readonly string _databaseId;
         private readonly ILogger _logger;
 
         public string DatabaseId => _databaseId;
 
-        public ApplicationDbContext(DocumentClient client, string databaseId, ILogger logger)
+        public ApplicationDbContext(IDocumentClient client, string databaseId, ILogger logger)
         {
-            this._client = (DocumentClient)client;
+            this._client = client;
             this._databaseId = databaseId;
             this._logger = logger;
         }
@@ -57,6 +58,16 @@ namespace StrikesLibrary
                 UriFactory.CreateDatabaseUri(_databaseId),
                 packageCollection);
 
+        }
+        public async Task CreateDocumentCollectionIfNotExistsAsync<T>(UniqueKeyPolicy uniqueKeyPolicy) 
+        {
+            var documentCollection = new DocumentCollection();
+            documentCollection.Id = typeof(T).Name;
+            documentCollection.UniqueKeyPolicy = uniqueKeyPolicy;
+            await _client.CreateDocumentCollectionIfNotExistsAsync(
+                UriFactory.CreateDatabaseUri(_databaseId),
+                documentCollection
+                );
         }
 
         public async Task CreateDocumentAsync<T>(T document)
