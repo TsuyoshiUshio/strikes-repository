@@ -16,34 +16,54 @@ namespace StrikesLibrary.Test
         [Fact]
         public async Task Create_DocumentCollection_IfNotExistsAsync_NormalCase()
         {
-            var ExpectedDatabaseId = "foo";
-            var ExpectedUniquePolicyPath = "/name";
-            var ExpectedThroughput = 2500;
+            var fixture = new Fixture();
+            fixture.ExpectedDatabaseId = "foo";
+            fixture.ExpectedUniquePolicyPath = "/name";
+            fixture.SetUp();
 
-            var documentClientMock = new Mock<IDocumentClient>();
-
-            string ActualDatabaseOriginalPath = "";
-            Collection<UniqueKey> ActualUniqueKey = null;
-            int? ActualOfferThroughput = 0;
-
-            documentClientMock.Setup(p => p.CreateDocumentCollectionIfNotExistsAsync(It.IsAny<Uri>(), It.IsAny<DocumentCollection>(), It.IsAny<RequestOptions>()))
-                .Returns(Task.FromResult<ResourceResponse<DocumentCollection>>(new ResourceResponse<DocumentCollection>()))
-                .Callback<Uri, DocumentCollection, RequestOptions>((uri, doc, options) =>
-            {
-                ActualDatabaseOriginalPath = uri.OriginalString;
-                var uniquePolicy = doc.UniqueKeyPolicy;
-                ActualUniqueKey = uniquePolicy.UniqueKeys;
-            });
-            var loggerMock = new Mock<ILogger>();
-
-            var context = new ApplicationDbContext(documentClientMock.Object, ExpectedDatabaseId, loggerMock.Object);
+            var context = new ApplicationDbContext(fixture.Client, fixture.ExpectedDatabaseId, fixture.Logger);
             var policy = new UniqueKeyPolicy();
-            policy.AddUniqueKey(ExpectedUniquePolicyPath);
+            policy.AddUniqueKey(fixture.ExpectedUniquePolicyPath);
             await context.CreateDocumentCollectionIfNotExistsAsync<Package>(policy);
 
 
-            Assert.Equal("dbs/" + ExpectedDatabaseId, ActualDatabaseOriginalPath);
-            Assert.Equal(ExpectedUniquePolicyPath, ActualUniqueKey[0].Paths[0]);
+            Assert.Equal("dbs/" + fixture.ExpectedDatabaseId, fixture.ActualDatabaseOriginalPath);
+            Assert.Equal(fixture.ExpectedUniquePolicyPath, fixture.ActualUniqueKey[0].Paths[0]);
+        }
+
+        private class Fixture
+        {
+            public string ExpectedDatabaseId { get; set; }
+            public string ExpectedUniquePolicyPath { get; set; }
+
+            public string ActualDatabaseOriginalPath { get; set; }
+            public Collection<UniqueKey> ActualUniqueKey {get; set;}
+
+            public IDocumentClient Client => _clientMock.Object;
+            public ILogger Logger => _loggerMock.Object;
+
+            private  Mock<IDocumentClient> _clientMock;
+            private Mock<ILogger> _loggerMock;
+
+            public Fixture()
+            {
+                _clientMock = new Mock<IDocumentClient>();
+                _loggerMock = new Mock<ILogger>();
+            }
+
+            public void SetUp()
+            {
+
+                _clientMock.Setup(p => p.CreateDocumentCollectionIfNotExistsAsync(It.IsAny<Uri>(), It.IsAny<DocumentCollection>(), It.IsAny<RequestOptions>()))
+                    .Returns(Task.FromResult<ResourceResponse<DocumentCollection>>(new ResourceResponse<DocumentCollection>()))
+                    .Callback<Uri, DocumentCollection, RequestOptions>((uri, doc, options) =>
+                    {
+                        ActualDatabaseOriginalPath = uri.OriginalString;
+                        var uniquePolicy = doc.UniqueKeyPolicy;
+                        ActualUniqueKey = uniquePolicy.UniqueKeys;
+                    });
+            }
+                
         }
 
     }
