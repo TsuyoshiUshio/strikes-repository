@@ -19,5 +19,10 @@ namespace DatabaseSeed
         {
             return _repository.CreateIndexWithCosmosIndexerAsync();
         }
+
+        public Task DeleteIndexAsync()
+        {
+            return _repository.DeleteIndexAsync();
+        }
     }
 }

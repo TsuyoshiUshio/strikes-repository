@@ -65,11 +65,13 @@ namespace DatabaseSeed
 
             await packageService.InitializeAsync();
 
-            foreach (var package in PackageFixture.GenerateTestFixture())
-            {
-                await packageService.CreatePackageAsync(package);
-            }
+            // In case you want to seed sample data. 
+            //foreach (var package in PackageFixture.GenerateTestFixture())
+            //{
+            //    await packageService.CreatePackageAsync(package);
+            //}
 
+            await searchService.DeleteIndexAsync();
             await searchService.CreateIndexWithIndexerAsync();
 
             Console.WriteLine("Seed has been finished.");
