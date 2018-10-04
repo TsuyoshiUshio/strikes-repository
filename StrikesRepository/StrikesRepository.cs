@@ -1,21 +1,16 @@
-
-using System.IO;
+using DIBindings;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.WebJobs.Host;
-using Newtonsoft.Json;
 using Microsoft.Extensions.Logging;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 using StrikesLibrary;
-using Microsoft.Azure.Documents.Client;
 using System;
-using System.Net.Http;
-using System.Web.Http;
-using DIBindings;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace StrikesRepository
 {
@@ -35,7 +30,7 @@ namespace StrikesRepository
             log.LogInformation(($"Query: {name}"));
             var results = await service.SearchNameAsync(name);
            
-            return new OkObjectResult(JsonConvert.SerializeObject(results));
+            return new OkObjectResult(JsonConvert.SerializeObject(results.Select(p => p.ToPackage())));
         }
         // Get Pakcage
         [FunctionName("GetPackage")]

@@ -82,7 +82,7 @@ namespace StrikesRepository.Test
             fixture.SetUpGetPackages();
             var result = await StrikesRepository.GetPackages(fixture.Request, fixture.SearchService, fixture.Logger);
             fixture.VerifyGetPackages();
-            Assert.Equal(fixture.ExpectedGetPackagesName, result.GetSearchPackages().ToArray()[0].Name);
+            Assert.Equal(fixture.ExpectedGetPackagesName, result.GetPackages().ToArray()[0].Name);
         }
 
         [Fact]
@@ -272,10 +272,10 @@ namespace StrikesRepository.Test
             return ((Package) ((OkObjectResult) result).Value).Name;
         }
 
-        internal static IEnumerable<SearchPackage> GetSearchPackages(this IActionResult result)
+        internal static IEnumerable<Package> GetPackages(this IActionResult result)
         {
              var json =  (string)((OkObjectResult) result).Value;
-            return JsonConvert.DeserializeObject<IEnumerable<SearchPackage>>(json);
+            return JsonConvert.DeserializeObject<IEnumerable<Package>>(json);
 
         }
 

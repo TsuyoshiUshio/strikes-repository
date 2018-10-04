@@ -28,6 +28,23 @@ namespace StrikesLibrary
 
         // Column for Azure Search soft delete
         public bool IsDeleted { get; set; }
+
+        public Package ToPackage()
+        {
+            var releases = JsonConvert.DeserializeObject<Release[]>(this.Releases);
+            return  new Package
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Description = this.Description,
+                Author = this.Author,
+                ProjectPage = this.ProjectPage,
+                ProjectRepo = this.ProjectRepo,
+                CreatedTime = this.CreatedTime,
+                Releases = releases,
+                IsDeleted = this.IsDeleted,
+            };
+        }
     }
 
 
