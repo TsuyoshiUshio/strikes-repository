@@ -82,7 +82,10 @@ namespace StrikesRepository.Test
             fixture.SetUpGetPackages();
             var result = await StrikesRepository.GetPackages(fixture.Request, fixture.SearchService, fixture.Logger);
             fixture.VerifyGetPackages();
-            Assert.Equal(fixture.ExpectedGetPackagesName, result.GetPackages().ToArray()[0].Name);
+            var Actual = result.GetPackages().ToArray()[0];
+            Assert.Equal(fixture.ExpectedGetPackagesName, Actual.Name);
+            Assert.Equal(fixture.ExpectedVersion, Actual.Releases[0].Version);
+
         }
 
         [Fact]
@@ -155,6 +158,7 @@ namespace StrikesRepository.Test
             private const string ExpectedPackageName = "foo";
             public string ExpectedGetPackagesName => ExpectedPackageName;
 
+            public string ExpectedVersion = "1.0.0";
             public void SetUpGetPackages()
             {
                 var queryCollection = new Mock<IQueryCollection>();
@@ -164,8 +168,9 @@ namespace StrikesRepository.Test
                 {
                     new SearchPackage()
                     {
-                        Name = ExpectedPackageName
-                    }
+                        Name = ExpectedPackageName,
+                        Releases = "[\r\n  {\r\n    \"Version\": \""+ExpectedVersion+"\",\r\n    \"ReleaseNote\": \"Initial implementation for the first G.A.\",\r\n    \"ProviderType\": \"Terraform\",\r\n    \"CreatedTime\": \"2018-10-11T12:13:14Z\"\r\n  }\r\n]"
+                    },           
                 };
                 _searchServiceMock.Setup(s => s.SearchNameAsync("h*")).ReturnsAsync(packageList);
 
