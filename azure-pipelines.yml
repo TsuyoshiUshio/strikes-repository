@@ -28,7 +28,9 @@ steps:
   inputs:
     summaryFileLocation: $(Build.SourcesDirectory)\results\coverage.cobertura.xml
     reportDirectory: $(Build.SourcesDirectory)\results
-    codecoverageTool: cobertura  
+    codecoverageTool: cobertura
+- task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+  displayName: 'Component Detection'
 
 - task: DotNetCoreCLI@2
   inputs:
